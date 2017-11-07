@@ -4,6 +4,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public final class Edges<K, T extends Node<K>>
 		implements Iterable<T> {
@@ -63,4 +64,7 @@ public final class Edges<K, T extends Node<K>>
 		return nodes.isEmpty();
 	}
 
+	public Stream<T> stream() {
+		return nodes.values().stream();
+	}
 }

@@ -30,7 +30,7 @@ public class TestDependencyGraph {
 		Packages basePackages=Packages.packages(Package.pkg("se"));
 		ClassGraph out=new ClassGraph(basePackages);
 		
-		Stream.of("One","Two","Three").forEach(c -> {
+		Stream.of("One","Two","Three","Hidden").forEach(c -> {
 			try {
 				ClassFile.readClassfile(archive, new ClassInputStream(Resources.getResource("packages/sample/one-two-three/"+c+".class").openStream()), out);
 			}
@@ -63,7 +63,10 @@ public class TestDependencyGraph {
 		
 		DefaultDirectedGraph<Method, DefaultEdge> graph = builder.build();
 		
-		String graphAsDot = GraphAsDot.builder(Method::toString).build().asDot(graph);
+		String graphAsDot = GraphAsDot.builder(Method::toString)
+				.label("callGraph")
+				.build()
+				.asDot(graph);
 		
 		System.out.println("----------------------");
 		
