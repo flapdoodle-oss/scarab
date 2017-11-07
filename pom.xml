@@ -337,5 +337,18 @@
 			<artifactId>de.flapdoodle.java8</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>de.flapdoodle.graph</groupId>
+			<artifactId>de.flapdoodle.graph</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>23.0</version>
+		</dependency>
+		
 	</dependencies>
 </project>
