@@ -11,6 +11,7 @@ import static se.jbee.jvm.Packages.packages;
 
 import java.io.IOException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.Suite.SuiteClasses;
 
@@ -27,6 +28,7 @@ import se.jbee.jvm.reflect.ClassProcessor;
 public class TestJarScanner {
 
 	@Test
+	@Ignore("works not an any machine")
 	public void testScanGraph() {
 		String file = "/home/jan/project/silk/dist/silk-di-0.4.3.jar";
 		Package root = Package.pkg( "se/jbee/inject" );
@@ -63,6 +65,7 @@ public class TestJarScanner {
 	}
 
 	@Test
+	@Ignore("works not an any machine")
 	public void testScanGraph2() {
 		String file = "/home/jan/Desktop/silk-all.jar";
 		Package root = Package.pkg( "se/jbee/inject" );
@@ -79,6 +82,7 @@ public class TestJarScanner {
 	}
 
 	@Test
+	@Ignore("works not an any machine")
 	public void testScanLargerGraph() {
 		Package root = Package.pkg( "org/springframework" );
 		ClassGraph g = new ClassGraph( packages( root ) );
