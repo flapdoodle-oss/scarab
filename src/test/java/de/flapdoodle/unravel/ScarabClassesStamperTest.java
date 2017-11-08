@@ -11,6 +11,8 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
 
+import de.flapdoodle.unravel.signature.Signature2Text;
+
 public class ScarabClassesStamperTest {
 
 	@Test
@@ -22,7 +24,7 @@ public class ScarabClassesStamperTest {
 		
 		Stamp stamp = new ScarabClassesStamper().stampOf(sampleClasses);
 		
-		System.out.println(stamp.prettyPrinted());
+		signatureOf(stamp);
 	}
 	
 	@Test
@@ -33,7 +35,7 @@ public class ScarabClassesStamperTest {
 		
 		Stamp stamp = new ScarabClassesStamper().stampOf(sampleClasses);
 		
-		System.out.println(stamp.prettyPrinted());
+		signatureOf(stamp);
 	}
 	
 	private static Supplier<InputStream> streamOf(String resourceName) {
@@ -45,5 +47,12 @@ public class ScarabClassesStamperTest {
 				throw new RuntimeException("could not open "+resourceName);
 			}
 		};
+	}
+	
+	private static void signatureOf(Stamp stamp) {
+		String asText = Signature2Text.toText(Stamp2Signature.asSignature(stamp));
+		System.out.println("------------------------");
+		System.out.println(asText);
+		System.out.println("------------------------");
 	}
 }

@@ -7,15 +7,15 @@ import org.immutables.value.Value.Immutable;
 import com.google.common.collect.ImmutableMultimap;
 
 import se.jbee.jvm.Class;
-import se.jbee.jvm.Field;
-import se.jbee.jvm.Method;
+import se.jbee.jvm.graph.FieldNode;
+import se.jbee.jvm.graph.MethodNode;
 
 @Immutable
 public abstract class Stamp {
-	public abstract ImmutableMultimap<Class, Method> visibleMethods();
-	public abstract ImmutableMultimap<Class, Field> visibleFields();
-	public abstract ImmutableMultimap<Class, Method> usedMethods();
-	public abstract ImmutableMultimap<Class, Field> usedFields();
+	public abstract ImmutableMultimap<Class, MethodNode> visibleMethods();
+	public abstract ImmutableMultimap<Class, FieldNode> visibleFields();
+	public abstract ImmutableMultimap<Class, MethodNode> usedMethods();
+	public abstract ImmutableMultimap<Class, FieldNode> usedFields();
 	
 	public String prettyPrinted() {
 		return prettyPrint(this);
@@ -28,13 +28,13 @@ public abstract class Stamp {
 	public static String prettyPrint(Stamp stamp) {
 		StringBuilder sb=new StringBuilder();
 		sb.append("Methods:\n");
-		print(sb, stamp.visibleMethods(), Method::toString);
+		print(sb, stamp.visibleMethods(), MethodNode::toString);
 		sb.append("Fields:\n");
-		print(sb, stamp.visibleFields(), Field::toString);
+		print(sb, stamp.visibleFields(), FieldNode::toString);
 		sb.append("used Methods:\n");
-		print(sb, stamp.usedMethods(), Method::toString);
+		print(sb, stamp.usedMethods(), MethodNode::toString);
 		sb.append("used Fields:\n");
-		print(sb, stamp.usedFields(), Field::toString);
+		print(sb, stamp.usedFields(), FieldNode::toString);
 		return sb.toString();
 	}
 	

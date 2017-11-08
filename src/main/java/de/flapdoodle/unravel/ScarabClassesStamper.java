@@ -65,7 +65,7 @@ public class ScarabClassesStamper implements ClassesStamper {
 //			System.out.println("Methods: ");
 //			publicMethods.forEach(m -> System.out.println(" -> "+m));
 			
-			publicMethods.forEach(m -> builder.putVisibleMethods(m.declaringClass.id(), m.id()));
+			publicMethods.forEach(m -> builder.putVisibleMethods(m.declaringClass.id(), m));
 	
 			ImmutableList<MethodNode> outgoingMethods = classGraph.methods.stream()
 				.filter(mn -> !mn.calledBy.isEmpty())
@@ -75,7 +75,7 @@ public class ScarabClassesStamper implements ClassesStamper {
 //			System.out.println("outgoing Methods: ");
 //			outgoingMethods.forEach(m -> System.out.println(" -> "+m));
 			
-			outgoingMethods.forEach(m -> builder.putUsedMethods(m.declaringClass.id(), m.id()));
+			outgoingMethods.forEach(m -> builder.putUsedMethods(m.declaringClass.id(), m));
 		}
 		{
 			ImmutableList<FieldNode> publicFields = classGraph.fields.stream()
@@ -85,7 +85,7 @@ public class ScarabClassesStamper implements ClassesStamper {
 				
 //				System.out.println("Fields: ");
 //				publicFields.forEach(m -> System.out.println(" -> "+m));
-				publicFields.forEach(m -> builder.putVisibleFields(m.declaringClass.id(), m.id()));
+				publicFields.forEach(m -> builder.putVisibleFields(m.declaringClass.id(), m));
 				
 				ImmutableList<FieldNode> outgoingFields = classGraph.fields.stream()
 						.filter(mn -> !mn.accessedBy.isEmpty())
@@ -94,7 +94,7 @@ public class ScarabClassesStamper implements ClassesStamper {
 					
 //					System.out.println("outgoing Fields: ");
 //					outgoingFields.forEach(m -> System.out.println(" -> "+m));
-					outgoingFields.forEach(m -> builder.putUsedFields(m.declaringClass.id(), m.id()));
+					outgoingFields.forEach(m -> builder.putUsedFields(m.declaringClass.id(), m));
 		}
 
 		return builder.build();
