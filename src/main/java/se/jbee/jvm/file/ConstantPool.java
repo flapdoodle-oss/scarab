@@ -21,7 +21,7 @@ public final class ConstantPool
 	/**
 	 * The tags as defined by the JVM spec.
 	 */
-	private static final ConstantTag[] JVM_TAGS = new ConstantTag[13];
+	private static final ConstantTag[] JVM_TAGS = new ConstantTag[19];
 
 	static {
 		JVM_TAGS[1] = ConstantTag.UTF8;
@@ -35,6 +35,9 @@ public final class ConstantPool
 		JVM_TAGS[10] = ConstantTag.METHOD_REF;
 		JVM_TAGS[11] = ConstantTag.INTERFACE_METHOD_REF;
 		JVM_TAGS[12] = ConstantTag.NAME_AND_TYPE;
+		JVM_TAGS[13] = ConstantTag.METHOD_HANDLE;
+		JVM_TAGS[16] = ConstantTag.METHOD_TYPE;
+		JVM_TAGS[18] = ConstantTag.INVOKE_DYNAMIC;
 	}
 
 	private static final ConstantPool SHARED = new ConstantPool( 1024 );
@@ -60,9 +63,12 @@ public final class ConstantPool
 		FIELD_REF, //= 9
 		METHOD_REF, //= 10
 		INTERFACE_METHOD_REF, //= 11
-		NAME_AND_TYPE // = 12
+		NAME_AND_TYPE, // = 12
+		METHOD_HANDLE, // = 15
+		METHOD_TYPE, // = 16
+		INVOKE_DYNAMIC // = 18
 		;
-
+		
 		public boolean isMethod() {
 			return this == METHOD_REF || this == INTERFACE_METHOD_REF;
 		}
