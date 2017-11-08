@@ -21,7 +21,6 @@ import de.flapdoodle.unravel.signature.Signature2Text;
 public class ScarabClassesStamperTest {
 
 	@Test
-	@Ignore
 	public void oneTwoThreeSample() {
 		ImmutableList<Supplier<InputStream>> sampleClasses = Stream.of("One","Two","Three","Hidden")
 			.map(c -> streamOf("packages/sample/one-two-three/"+c+".class"))
@@ -33,7 +32,6 @@ public class ScarabClassesStamperTest {
 	}
 	
 	@Test
-	@Ignore 
 	public void modifiersSample() {
 		ImmutableList<Supplier<InputStream>> sampleClasses = Stream.of("Api","Impl","ImplFactory","AbstractClient","AbstractClient$1")
 			.map(c -> streamOf("packages/sample/modifiers/"+c+".class"))
@@ -45,6 +43,7 @@ public class ScarabClassesStamperTest {
 	} 
 	
 	@Test
+	@Ignore
 	public void liveSample() throws IOException {
 		ImmutableList<Supplier<InputStream>> all = Files.walk(Paths.get("target", "test-classes","se","jbee","sample","egdecases"))
 				.filter(path -> path.getFileName().toString().endsWith(".class"))
