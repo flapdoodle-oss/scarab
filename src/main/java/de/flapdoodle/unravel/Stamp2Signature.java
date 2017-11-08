@@ -48,6 +48,7 @@ public class Stamp2Signature {
 
 	private static UsedClass asUsedClass(Class c, ImmutableCollection<MethodNode> methods, ImmutableCollection<FieldNode> fields) {
 		return UsedClass.builder()
+				.isArray(c.isArray())
 				.packageName(c.pkg().canonicalName())
 				.name(c.simpleName())
 				.methods(asUsedMethods(methods))
@@ -69,6 +70,7 @@ public class Stamp2Signature {
 
 	private static VisibleClass asVisibleClass(Class c, ImmutableCollection<MethodNode> methods, ImmutableCollection<FieldNode> fields) {
 		return VisibleClass.builder()
+				.isArray(c.isArray())
 				.visibility(visibilityOf(c.modifiers))
 				.packageName(c.pkg().canonicalName())
 				.name(c.simpleName())

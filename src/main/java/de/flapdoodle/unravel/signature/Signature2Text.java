@@ -86,10 +86,14 @@ public class Signature2Text {
 	}
 
 	private static String asString(CommonClass type) {
-		if (type.packageName().isEmpty()) {
-			return type.name();
+		String post="";
+		if (type.isArray()) {
+			post="[]";
 		}
-		return type.packageName() + "." + type.name();
+		if (type.packageName().isEmpty()) {
+			return type.name()+post;
+		}
+		return type.packageName() + "." + type.name()+post;
 	}
 
 }
