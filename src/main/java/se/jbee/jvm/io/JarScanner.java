@@ -56,6 +56,30 @@ public class JarScanner {
 			scan( new ZipFile( file ) );
 		}
 	}
+	
+	public void scan(String archiveName, ZipInputStream zip) throws IOException {
+		Archive archive = archive( archiveName );
+		ZipEntry entry;
+		while((entry=zip.getNextEntry()) != null) {
+			if ( !entry.isDirectory() ) {
+				String name = entry.getName();
+				if ( isClassFile( name ) ) {
+					scan( archive, zip );
+				} else if ( Archive.isArchiveFile( name ) && filter.process( archive( name ) ) ) {
+					ZipInputStream in = new ZipInputStream( zip );
+					entry = in.getNextEntry();
+					while ( entry != null ) {
+						if ( isClassFile( entry.getName() ) ) {
+							scan( archive( name ), in );
+						}
+						in.closeEntry();
+						entry = in.getNextEntry();
+					}
+					in.close();
+				}
+			}
+		} 
+	}
 
 	public void scan( ZipFile zip )
 			throws IOException {

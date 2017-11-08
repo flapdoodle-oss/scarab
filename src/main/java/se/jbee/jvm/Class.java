@@ -1,6 +1,5 @@
 package se.jbee.jvm;
 
-
 public final class Class {
 
 	public static final Class NONE = new Class( Modifiers.UNKNOWN_CLASS, 0, "" );

@@ -39,7 +39,7 @@ public class ScarabClassesStamper implements ClassesStamper {
 		return stampOf(out);
 	}
 
-	private Stamp stampOf(ClassGraph classGraph) {
+	protected static Stamp stampOf(ClassGraph classGraph) {
 		Builder builder = Stamp.builder();
 		
 		ImmutableSet<Class> classesOfBlob = classGraph.classes.stream()
