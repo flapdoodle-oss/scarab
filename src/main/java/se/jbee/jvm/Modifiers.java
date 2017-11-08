@@ -85,6 +85,10 @@ public final class Modifiers {
 		return has( Modifier.PROTECTED );
 	}
 
+	public boolean isPrivate() {
+		return has( Modifier.PRIVATE);
+	}
+
 	public boolean isClass() {
 		return !isInterface() && !isEnum() && !isAnnotation() && !isUnknown();
 	}

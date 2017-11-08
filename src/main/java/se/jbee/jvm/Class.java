@@ -113,6 +113,22 @@ public final class Class {
 	public boolean isAnonymous() {
 		return name.lastIndexOf( '$' ) > 0;
 	}
+	
+	public boolean isPublic() {
+		return modifiers.isPublic();
+	}
+
+	public boolean isProtected() {
+		return modifiers.isProtected() || (isTopLevel() && !isPublic());
+	}
+
+	public boolean isPrivate() {
+		return modifiers.isPrivate();
+	}
+	
+	public boolean isTopLevel() {
+		return !isAnonymous() && !isInner();
+	}
 
 	public boolean isObject() {
 		return equalTo( Class.OBJECT );

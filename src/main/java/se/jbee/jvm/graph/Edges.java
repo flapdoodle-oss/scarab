@@ -2,9 +2,16 @@ package se.jbee.jvm.graph;
 
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.google.common.base.Preconditions;
 
 public final class Edges<K, T extends Node<K>>
 		implements Iterable<T> {
@@ -66,5 +73,22 @@ public final class Edges<K, T extends Node<K>>
 
 	public Stream<T> stream() {
 		return nodes.values().stream();
+	}
+	
+	public void forEach(BiConsumer<? super K, ? super T> action) {
+		nodes.forEach(action);
+	}
+	
+	public Set<K> keySet() {
+		return nodes.keySet();
+	}
+	
+	public Optional<K> findOne(Predicate<K> matcher) {
+		List<K> matching = nodes.keySet().stream()
+			.filter(matcher)
+			.limit(2)
+			.collect(Collectors.toList());
+		Preconditions.checkArgument(matching.size()<2,"more than one matching");
+		return matching.isEmpty() ? Optional.empty() : Optional.of(matching.get(0));
 	}
 }
