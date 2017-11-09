@@ -31,7 +31,6 @@ public class Stamp2Signature {
 
 		Sets.union(stamp.visibleMethods().asMap().keySet(), stamp.visibleFields().asMap().keySet())
 				.stream()
-				.filter(c -> !c.pkg().canonicalName().startsWith("java."))
 				.forEach(c -> {
 					ImmutableCollection<MethodNode> methods = stamp.visibleMethods().get(c);
 					ImmutableCollection<FieldNode> fields = stamp.visibleFields().get(c);

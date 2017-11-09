@@ -33,7 +33,7 @@ public final class ClassFile {
 		ConstantPool cp = ConstantPool.read( in );
 
 		Modifiers modifiers = Modifiers.classModifiers( in.uint16bit() );
-		Class cls = Class.cls( modifiers, cp.utf0( in.uint16bit() ) );
+		Class cls = Class.cls(modifiers, cp.utf0( in.uint16bit() ));
 		Class superclass = Class.unknownClass( cp.utf0( in.uint16bit() ) );
 		Class[] interfaces = readInterfaces( in, cp, in.uint16bit() );
 		DeclarationPool dp = DeclarationPool.read( in, cls, cp );

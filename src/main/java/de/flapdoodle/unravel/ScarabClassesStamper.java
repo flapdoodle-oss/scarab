@@ -24,7 +24,7 @@ public class ScarabClassesStamper implements ClassesStamper {
 
 	@Override
 	public Stamp stampOf(Collection<? extends Supplier<? extends InputStream>> classStreams) {
-		Archive archive=Archive.NONE;
+		Archive archive=Archive.archive("dummy");
 		ClassGraph out=new ClassGraph(Packages.packages(Package.DEFAULT));
 		
 		classStreams.forEach(streamSupplier -> {
@@ -36,22 +36,25 @@ public class ScarabClassesStamper implements ClassesStamper {
 			}
 		});
 
-		return stampOf(out);
+		return stampOf(out, archive);
 	}
 
-	protected static Stamp stampOf(ClassGraph classGraph) {
+	protected static Stamp stampOf(ClassGraph classGraph, Archive archive) {
 		Builder builder = Stamp.builder();
 		
 		ImmutableSet<Class> classesOfBlob = classGraph.classes.stream()
-			.filter(cn -> !cn.modifiers().isUnknown())
+			.filter(cn -> !cn.id().modifiers.isUnknown())
+			.filter(cn -> !cn.id().isPrimitive())
+			.filter(cn -> !cn.id().canonicalName().startsWith("java."))
+			.filter(cn -> cn.archive.id().equals(archive))
 			.map(ClassNode::id)
 			.collect(ImmutableSet.toImmutableSet());
 		
 //		System.out.println("Classes: ");
-//		classesOfBlob.forEach(c -> System.out.println(" -> "+c));
+//		classesOfBlob.forEach(c -> System.out.println(" -> "+c+" - "+c.modifiers.isUnknown()));
 
 		ImmutableSet<Class> visibleClasses = classesOfBlob.stream()
-			.filter(c -> c.modifiers.isPublic() || c.modifiers.isProtected())
+			.filter(c -> c.isProtected() || c.isPublic())
 			.collect(ImmutableSet.toImmutableSet());
 
 //		System.out.println("visible Classes: ");

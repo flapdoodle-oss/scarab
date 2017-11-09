@@ -15,6 +15,7 @@ public class ScarabJarSignature {
 		Signature signature = Jars.signatureOfJar(jarFile);
 		String signatureAsString = Signature2Text.toText(signature);
 		
+		System.out.println(jarFile);
 		System.out.println("------------------------------");
 		System.out.println(signatureAsString);
 		System.out.println("------------------------------");

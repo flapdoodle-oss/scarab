@@ -1,5 +1,8 @@
 package se.jbee.jvm;
 
+import io.vavr.collection.List;
+import io.vavr.collection.Set;
+
 public final class Class {
 
 	public static final Class NONE = new Class( Modifiers.UNKNOWN_CLASS, 0, "" );
@@ -7,7 +10,8 @@ public final class Class {
 	public static final Class OBJECT = cls( Object.class );
 	public static final Class ENUM = cls( Enum.class );
 	public static final Class CLASS = cls( java.lang.Class.class );
-
+	public static final Set<String> PRIMITVES = List.of(boolean.class, char.class, float.class, int.class, byte.class, double.class).map(c -> cls(c).name).toSet();
+	
 	public static Class unknownClass( String name ) {
 		return cls( Modifiers.UNKNOWN_CLASS, name );
 	}
@@ -35,7 +39,7 @@ public final class Class {
 			: 0;
 	}
 
-	public static Class cls( Modifiers modifiers, String name, int arrayDimentions ) {
+	public static Class cls( Modifiers modifiers, String name, int arrayDimentions) {
 		if ( name == null || name.isEmpty() ) {
 			return Class.NONE;
 		}
@@ -134,6 +138,11 @@ public final class Class {
 		return equalTo( Class.OBJECT );
 	}
 
+	public boolean isPrimitive() {
+		return PRIMITVES.contains(this.name);
+	}
+
+	
 	public boolean isInner() {
 		return name.indexOf( '$' ) > 0;
 	}
@@ -162,5 +171,6 @@ public final class Class {
 		}
 		return modifiers + " " + res;
 	}
+
 
 }

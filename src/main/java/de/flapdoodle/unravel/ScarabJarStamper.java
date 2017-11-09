@@ -16,7 +16,7 @@ public class ScarabJarStamper implements JarStamper {
 
 	@Override
 	public Stamp stamp(Supplier<InputStream> jarStream) {
-		Archive archive = Archive.NONE;
+		Archive archive = Archive.archive("dummy");
 		ClassGraph out = new ClassGraph(Packages.packages(Package.DEFAULT));
 
 		try {
@@ -28,7 +28,7 @@ public class ScarabJarStamper implements JarStamper {
 			throw new RuntimeException(e);
 		}
 
-		return ScarabClassesStamper.stampOf(out);
+		return ScarabClassesStamper.stampOf(out,archive);
 	}
 
 }
