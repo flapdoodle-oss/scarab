@@ -2,26 +2,20 @@ package de.flapdoodle.unravel.signature;
 
 import org.junit.Test;
 
-public class SignatureMatcherTest {
+public class SignatureMatcherTest extends AbstractSignatureTest {
 
 	@Test
 	public void allOutgoingMethodsAreMatching() {
+		
+		ClassName fooClass = className("foo", "Foo");
+		
+		visibleClass(fooClass,	visibleMethod(typeOf(String.class), "hello", typeOf(int.class)));
+		
 		ImmutableSignature a = Signature.builder()
-				.addVisibleClasses(VisibleClass.builder()
-						.isArray(false)
-						.visibility(Visibility.Public)
-						.name("foo","Foo")
-						.addMethods(VisibleMethod.builder()
-								.isStatic(false)
-								.visibility(Visibility.Protected)
-								.returnType(SimpleType.of("java.lang", "String"))
-								.name("hello")
-								.addParameterTypes(SimpleType.of("", "int"))
-								.build())
-						.build())
+				.addVisibleClasses(visibleClass(fooClass,	visibleMethod(typeOf(String.class), "hello", typeOf(int.class))))
 				.addUsedClasses(UsedClass.builder()
 						.isArray(false)
-						.name("bar","Bar")
+						.name(ClassName.of("bar","Bar"))
 						.addMethods(UsedMethod.builder()
 								.isStatic(false)
 								.returnType(SimpleType.of("java.lang", "String"))
@@ -34,7 +28,7 @@ public class SignatureMatcherTest {
 				.addVisibleClasses(VisibleClass.builder()
 						.isArray(false)
 						.visibility(Visibility.Public)
-						.name("bar","Bar")
+						.name(ClassName.of("bar","Bar"))
 						.addMethods(VisibleMethod.builder()
 								.isStatic(false)
 								.visibility(Visibility.Protected)
@@ -47,4 +41,5 @@ public class SignatureMatcherTest {
 		
 		SignatureMatcher.match(a, b);
 	}
+	
 }

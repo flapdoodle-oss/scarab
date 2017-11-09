@@ -5,6 +5,9 @@ import org.immutables.value.Value.Immutable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+import io.vavr.collection.List;
+import io.vavr.collection.Map;
+
 public class SignatureMatcher {
 
 	public static void match(Signature a, Signature b) {
@@ -12,15 +15,12 @@ public class SignatureMatcher {
 		match(b.usedClasses(), a.visibleClasses());
 	}
 
-	private static void match(ImmutableList<UsedClass> usedClasses, ImmutableList<VisibleClass> visibleClasses) {
-		ImmutableMap<ClassName, VisibleClass> classMap = visibleClasses.stream()
-			.collect(ImmutableMap.toImmutableMap(VisibleClass::name, noop -> noop));
+	private static void match(List<UsedClass> usedClasses, List<VisibleClass> visibleClasses) {
+		Map<ClassName, VisibleClass> classMap = visibleClasses.toMap(VisibleClass::name, noop -> noop);
 		
 		usedClasses.forEach(usedClass -> {
-			VisibleClass clazz = classMap.get(usedClass.name());
-			if (clazz!=null) {
-				matchMethods(usedClass.methods(), clazz.methods());
-			}
+			classMap.get(usedClass.name())
+				.peek(clazz -> matchMethods(usedClass.methods(), clazz.methods()));
 		});
 	}
 

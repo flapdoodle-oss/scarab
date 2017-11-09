@@ -7,14 +7,12 @@ public class Signature2Text {
 	public static String toText(Signature sign) {
 		StringBuilder sb = new StringBuilder();
 		sign.visibleClasses()
-				.stream()
 				.sorted(VisibleClass.defaultOrdering())
 				.forEach(c -> {
 					render(sb, c);
 				});
 		sb.append("---\n");
 		sign.usedClasses()
-				.stream()
 				.sorted(UsedClass.defaultOrdering())
 				.forEach(c -> {
 					render(sb, c);
