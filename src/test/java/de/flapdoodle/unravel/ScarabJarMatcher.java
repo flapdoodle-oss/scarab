@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import de.flapdoodle.unravel.io.Jars;
 import de.flapdoodle.unravel.signature.Signature;
 import de.flapdoodle.unravel.signature.SignatureMatcher;
+import de.flapdoodle.unravel.signature.SignatureMatcher.Match;
 
 public class ScarabJarMatcher {
 
@@ -16,7 +17,8 @@ public class ScarabJarMatcher {
 		Signature signatureA = Jars.signatureOfJar(jarFileA);
 		Signature signatureB = Jars.signatureOfJar(jarFileB);
 		
-		SignatureMatcher.match(signatureA, signatureB);
+		Match match = SignatureMatcher.match(signatureA, signatureB);
+		
 	}
 
 }

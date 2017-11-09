@@ -32,4 +32,75 @@ public class SignatureMatcherTest extends AbstractSignatureTest {
 		assertTrue("no duplicates", match.duplicateClasses().isEmpty());
 	}
 	
+	@Test
+	public void missingMethod() {
+		ClassName fooClass = className("foo", "Foo");
+		ClassName barClass = className("bar", "Bar");
+		
+		UsedMethod missingMethod = usedMethod(typeOf(String.class), "world", typeOf(int.class));
+		
+		ImmutableSignature a = Signature.builder()
+			.addVisibleClasses(visibleClass(fooClass,	visibleMethod(typeOf(String.class), "hello", typeOf(int.class))))
+			.addUsedClasses(usedClass(barClass,	usedMethod(typeOf(String.class), "world"), missingMethod))
+			.build();
+		
+		ImmutableSignature b = Signature.builder()
+				.addVisibleClasses(visibleClass(barClass,	visibleMethod(typeOf(String.class), "world")))
+				.build();
+		
+		Match match = SignatureMatcher.match(a, b);
+		
+		assertEquals("matching", 0, match.matching().size());
+		assertEquals("failed", 1, match.failed().size());
+		assertEquals("failed", Tuple.of(barClass, Tuple.of(missingMethod, "not found")), match.failed().get());
+		assertTrue("no duplicates", match.duplicateClasses().isEmpty());
+	}
+
+	@Test
+	public void returnTypeMismatch() {
+		ClassName fooClass = className("foo", "Foo");
+		ClassName barClass = className("bar", "Bar");
+		
+		UsedMethod call = usedMethod(typeOf(int.class), "world");
+		
+		ImmutableSignature a = Signature.builder()
+			.addVisibleClasses(visibleClass(fooClass,	visibleMethod(typeOf(String.class), "hello", typeOf(int.class))))
+			.addUsedClasses(usedClass(barClass,	call))
+			.build();
+		
+		ImmutableSignature b = Signature.builder()
+				.addVisibleClasses(visibleClass(barClass,	visibleMethod(typeOf(String.class), "world")))
+				.build();
+		
+		Match match = SignatureMatcher.match(a, b);
+		
+		assertEquals("matching", 0, match.matching().size());
+		assertEquals("failed", 1, match.failed().size());
+		assertEquals("failed", Tuple.of(barClass, Tuple.of(call, "return type missmatch")), match.failed().get());
+		assertTrue("no duplicates", match.duplicateClasses().isEmpty());
+	}
+
+	@Test
+	public void staticMismatch() {
+		ClassName fooClass = className("foo", "Foo");
+		ClassName barClass = className("bar", "Bar");
+		
+		UsedMethod call = usedMethod(true, typeOf(String.class), "world");
+		
+		ImmutableSignature a = Signature.builder()
+			.addVisibleClasses(visibleClass(fooClass,	visibleMethod(typeOf(String.class), "hello", typeOf(int.class))))
+			.addUsedClasses(usedClass(barClass,	call))
+			.build();
+		
+		ImmutableSignature b = Signature.builder()
+				.addVisibleClasses(visibleClass(barClass,	visibleMethod(typeOf(String.class), "world")))
+				.build();
+		
+		Match match = SignatureMatcher.match(a, b);
+		
+		assertEquals("matching", 0, match.matching().size());
+		assertEquals("failed", 1, match.failed().size());
+		assertEquals("failed", Tuple.of(barClass, Tuple.of(call, "static missmatch")), match.failed().get());
+		assertTrue("no duplicates", match.duplicateClasses().isEmpty());
+	}
 }
