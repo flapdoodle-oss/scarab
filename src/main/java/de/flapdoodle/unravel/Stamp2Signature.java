@@ -31,6 +31,7 @@ public class Stamp2Signature {
 
 		Sets.union(stamp.visibleMethods().asMap().keySet(), stamp.visibleFields().asMap().keySet())
 				.stream()
+				.filter(c -> !c.pkg().canonicalName().startsWith("java."))
 				.forEach(c -> {
 					ImmutableCollection<MethodNode> methods = stamp.visibleMethods().get(c);
 					ImmutableCollection<FieldNode> fields = stamp.visibleFields().get(c);
@@ -39,6 +40,7 @@ public class Stamp2Signature {
 		
 		Sets.union(stamp.usedMethods().asMap().keySet(), stamp.usedFields().asMap().keySet())
 			.stream()
+			.filter(c -> !c.pkg().canonicalName().startsWith("java."))
 			.forEach(c -> {
 				ImmutableCollection<MethodNode> methods = stamp.usedMethods().get(c);
 				ImmutableCollection<FieldNode> fields = stamp.usedFields().get(c);
@@ -51,7 +53,7 @@ public class Stamp2Signature {
 	private static UsedClass asUsedClass(Class c, ImmutableCollection<MethodNode> methods, ImmutableCollection<FieldNode> fields) {
 		return UsedClass.builder()
 				.isArray(c.isArray())
-				.name(ClassName.of(c.pkg().canonicalName(), c.simpleName()))
+				.name(ClassName.of(c.canonicalName()))
 				.addAllMethods(asUsedMethods(methods))
 				.addAllFields(asUsedFields(fields))
 				.build();
@@ -73,7 +75,7 @@ public class Stamp2Signature {
 		return VisibleClass.builder()
 				.isArray(c.isArray())
 				.visibility(visibilityOf(c.modifiers))
-				.name(ClassName.of(c.pkg().canonicalName(), c.simpleName()))
+				.name(ClassName.of(c.canonicalName()))
 				.addAllMethods(asMethods(methods))
 				.addAllFields(asFields(fields))
 				.build();

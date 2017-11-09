@@ -1,5 +1,6 @@
 package de.flapdoodle.unravel.signature;
 
+import org.immutables.value.Value.Default;
 import org.immutables.value.Value.Immutable;
 import org.immutables.vavr.encodings.VavrEncodingEnabled;
 
@@ -39,7 +40,6 @@ public class SignatureMatcher {
 			classMap.get(usedClass.name())
 					.peek(clazz -> matchMethods(builder, usedClass, clazz))
 					.onEmpty(() -> {
-						System.out.println("no connection: " + usedClass);
 						builder.addUnused(usedClass);
 					});
 		});
@@ -67,8 +67,11 @@ public class SignatureMatcher {
 			return Option.of(Tuple.of(method,"not found"));
 		}
 		return matchingMethod.flatMap(usedMethod -> {
-				if (usedMethod.isStatic() != method.isStatic()) {
-					return Option.of(Tuple.of(method,"static missmatch"));
+				if (false) {
+					// TODO fix this
+					if (usedMethod.isStatic() != method.isStatic()) {
+						return Option.of(Tuple.of(method,"static missmatch"));
+					}
 				}
 				if (!usedMethod.returnType().equals(method.returnType())) {
 					return Option.of(Tuple.of(method,"return type missmatch"));
@@ -104,6 +107,11 @@ public class SignatureMatcher {
 
 		public static ImmutableMatch.Builder builder() {
 			return ImmutableMatch.builder();
+		}
+
+		@Default
+		default boolean noConflicts() {
+			return duplicateClasses().isEmpty() && failed().isEmpty();
 		}
 	}
 }

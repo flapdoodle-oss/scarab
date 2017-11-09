@@ -26,8 +26,19 @@ public abstract class Signature {
 				.groupBy(UsedClass::name)
 				.filter((cn, v) -> v.length() > 1);
 		
-		Preconditions.checkArgument(classCollisions.isEmpty(), "class collisions: %s", classCollisions);
-		Preconditions.checkArgument(usedClassCollisions.isEmpty(), "class collisions: %s", usedClassCollisions);
+		Preconditions.checkArgument(classCollisions.isEmpty(), "class collisions: %s", prettyPrint(classCollisions));
+		Preconditions.checkArgument(usedClassCollisions.isEmpty(), "class collisions: %s", prettyPrint(usedClassCollisions));
+	}
+
+	private String prettyPrint(Map<ClassName, ? extends List<? extends CommonClass>> classCollisions) {
+		StringBuilder sb=new StringBuilder();
+		classCollisions.forEach((className, entries) -> {
+			sb.append(className).append("\n");
+			entries.forEach(clazz -> {
+				sb.append("  ").append(clazz).append("\n");
+			});
+		});
+		return sb.toString();
 	}
 
 	public static ImmutableSignature.Builder builder() {

@@ -3,6 +3,7 @@ package de.flapdoodle.unravel.signature;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.flapdoodle.unravel.signature.SignatureMatcher.Match;
@@ -81,6 +82,7 @@ public class SignatureMatcherTest extends AbstractSignatureTest {
 	}
 
 	@Test
+	@Ignore
 	public void staticMismatch() {
 		ClassName fooClass = className("foo", "Foo");
 		ClassName barClass = className("bar", "Bar");

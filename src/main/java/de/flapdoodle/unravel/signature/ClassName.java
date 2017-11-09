@@ -22,4 +22,12 @@ public interface ClassName extends Comparable<ClassName> {
 	public static ClassName of(String packageName, String name) {
 		return ImmutableClassName.of(packageName, name);
 	}
+	
+	public static ClassName of(String canonicalName) {
+		int idx=canonicalName.lastIndexOf('.');
+		if (idx!=-1) {
+			return of(canonicalName.substring(0, idx), canonicalName.substring(idx+1));
+		}
+		return of("", canonicalName);
+	}
 }
