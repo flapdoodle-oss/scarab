@@ -1,12 +1,14 @@
 package de.flapdoodle.unravel.signature;
 
+import io.vavr.collection.List;
+
 public abstract class AbstractSignatureTest {
 	protected  static VisibleClass visibleClass(ClassName className , VisibleMethod ... methods) {
 		return VisibleClass.builder()
 				.isArray(false)
 				.visibility(Visibility.Public)
 				.name(className)
-				.addMethods(methods)
+				.methods(List.of(methods))
 				.build();
 	}
 	
@@ -20,7 +22,7 @@ public abstract class AbstractSignatureTest {
 				.visibility(Visibility.Public)
 				.returnType(returnType)
 				.name(name)
-				.addParameterTypes(parameters)
+				.parameterTypes(List.of(parameters))
 				.build();
 	}
 	

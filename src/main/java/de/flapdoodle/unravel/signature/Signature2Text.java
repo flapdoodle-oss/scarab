@@ -23,13 +23,11 @@ public class Signature2Text {
 	private static void render(StringBuilder sb, VisibleClass c) {
 		sb.append(asString(c.visibility())).append(asString(c)).append("\n");
 		c.fields()
-				.stream()
 				.sorted(CommonField.defaultOrdering())
 				.forEach(field -> {
 					renderField(sb, field);
 				});
 		c.methods()
-				.stream()
 				.sorted(CommonMethod.defaultOrdering())
 				.forEach(method -> {
 					renderMethod(sb, method);
@@ -39,13 +37,11 @@ public class Signature2Text {
 	private static void render(StringBuilder sb, UsedClass c) {
 		sb.append(asString(c)).append("\n");
 		c.fields()
-				.stream()
 				.sorted(CommonField.defaultOrdering())
 				.forEach(field -> {
 					renderField(sb, field);
 				});
 		c.methods()
-				.stream()
 				.sorted(CommonMethod.defaultOrdering())
 				.forEach(method -> {
 					renderMethod(sb, method);
@@ -59,7 +55,7 @@ public class Signature2Text {
 		}
 		sb.append(asString(method.returnType()));
 		sb.append(" .").append(method.name()).append("(");
-		sb.append(method.parameterTypes().stream()
+		sb.append(method.parameterTypes()
 				.map(pt -> asString(pt))
 				.collect(Collectors.joining(",")));
 		sb.append(")");

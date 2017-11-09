@@ -17,6 +17,7 @@ import de.flapdoodle.unravel.signature.Visibility;
 import de.flapdoodle.unravel.signature.VisibleClass;
 import de.flapdoodle.unravel.signature.VisibleField;
 import de.flapdoodle.unravel.signature.VisibleMethod;
+import io.vavr.collection.List;
 import se.jbee.jvm.Class;
 import se.jbee.jvm.Modifiers;
 import se.jbee.jvm.Parameter;
@@ -51,12 +52,12 @@ public class Stamp2Signature {
 		return UsedClass.builder()
 				.isArray(c.isArray())
 				.name(ClassName.of(c.pkg().canonicalName(), c.simpleName()))
-				.methods(asUsedMethods(methods))
-				.fields(asUsedFields(fields))
+				.addAllMethods(asUsedMethods(methods))
+				.addAllFields(asUsedFields(fields))
 				.build();
 	}
 
-	private static Iterable<? extends UsedField> asUsedFields(ImmutableCollection<FieldNode> fields) {
+	private static Iterable<UsedField> asUsedFields(ImmutableCollection<FieldNode> fields) {
 		return fields.stream().map(f -> asUsedField(f)).collect(ImmutableList.toImmutableList());
 	}
 
@@ -73,12 +74,12 @@ public class Stamp2Signature {
 				.isArray(c.isArray())
 				.visibility(visibilityOf(c.modifiers))
 				.name(ClassName.of(c.pkg().canonicalName(), c.simpleName()))
-				.methods(asMethods(methods))
-				.fields(asFields(fields))
+				.addAllMethods(asMethods(methods))
+				.addAllFields(asFields(fields))
 				.build();
 	}
 
-	private static Iterable<? extends VisibleField> asFields(ImmutableCollection<FieldNode> fields) {
+	private static Iterable<VisibleField> asFields(ImmutableCollection<FieldNode> fields) {
 		return fields.stream().map(f -> asField(f)).collect(ImmutableList.toImmutableList());
 	}
 
@@ -91,12 +92,12 @@ public class Stamp2Signature {
 				.build();
 	}
 
-	private static Iterable<? extends VisibleMethod> asMethods(ImmutableCollection<MethodNode> methods) {
+	private static Iterable<VisibleMethod> asMethods(ImmutableCollection<MethodNode> methods) {
 		return methods.stream().map(m -> asMethod(m)).collect(ImmutableList.toImmutableList());
 	}
 
-	private static Iterable<? extends UsedMethod> asUsedMethods(ImmutableCollection<MethodNode> methods) {
-		return methods.stream().map(m -> asUsedMethod(m)).collect(ImmutableList.toImmutableList());
+	private static Iterable<UsedMethod> asUsedMethods(ImmutableCollection<MethodNode> methods) {
+		return methods.stream().map(m -> asUsedMethod(m)).collect(List.collector());
 	}
 
 	private static VisibleMethod asMethod(MethodNode m) {
@@ -105,7 +106,7 @@ public class Stamp2Signature {
 				.visibility(visibilityOf(m.id().modifiers()))
 				.returnType(asType(m.id().returnType))
 				.name(m.id().name())
-				.parameterTypes(asTypes(m.id().parameters()))
+				.addAllParameterTypes(asTypes(m.id().parameters()))
 				// TODO: throwing not implemented
 				.build();
 	}
@@ -115,12 +116,12 @@ public class Stamp2Signature {
 				.isStatic(m.isStaticMethod())
 				.returnType(asType(m.id().returnType))
 				.name(m.id().name())
-				.parameterTypes(asTypes(m.id().parameters()))
+				.addAllParameterTypes(asTypes(m.id().parameters()))
 				// TODO: throwing not implemented
 				.build();
 	}
 
-	private static Iterable<? extends SimpleType> asTypes(Parameter[] parameters) {
+	private static Iterable<SimpleType> asTypes(Parameter[] parameters) {
 		return Stream.of(parameters).map(p -> asType(p)).collect(ImmutableList.toImmutableList());
 	}
 

@@ -3,15 +3,18 @@ package de.flapdoodle.unravel.signature;
 import java.util.Comparator;
 
 import org.immutables.value.Value.Immutable;
+import org.immutables.vavr.encodings.VavrEncodingEnabled;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 
+import io.vavr.collection.List;
+
 @Immutable
+@VavrEncodingEnabled
 public interface UsedClass extends CommonClass {
 	
-	ImmutableList<UsedMethod> methods();
-	ImmutableList<UsedField> fields();
+	List<UsedMethod> methods();
+	List<UsedField> fields();
 	
 	public static ImmutableUsedClass.Builder builder() {
 		return ImmutableUsedClass.builder();

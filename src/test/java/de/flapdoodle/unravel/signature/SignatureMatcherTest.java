@@ -34,7 +34,6 @@ public class SignatureMatcherTest extends AbstractSignatureTest {
 								.visibility(Visibility.Protected)
 								.returnType(SimpleType.of("java.lang", "String"))
 								.name("world")
-								.addParameterTypes()
 								.build())
 						.build())
 				.build();
