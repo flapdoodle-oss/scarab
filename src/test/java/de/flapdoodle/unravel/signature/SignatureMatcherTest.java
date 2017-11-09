@@ -1,44 +1,35 @@
 package de.flapdoodle.unravel.signature;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
+
+import de.flapdoodle.unravel.signature.SignatureMatcher.Match;
+import io.vavr.Tuple;
 
 public class SignatureMatcherTest extends AbstractSignatureTest {
 
 	@Test
 	public void allOutgoingMethodsAreMatching() {
-		
 		ClassName fooClass = className("foo", "Foo");
-		
-		visibleClass(fooClass,	visibleMethod(typeOf(String.class), "hello", typeOf(int.class)));
+		ClassName barClass = className("bar", "Bar");
 		
 		ImmutableSignature a = Signature.builder()
-				.addVisibleClasses(visibleClass(fooClass,	visibleMethod(typeOf(String.class), "hello", typeOf(int.class))))
-				.addUsedClasses(UsedClass.builder()
-						.isArray(false)
-						.name(ClassName.of("bar","Bar"))
-						.addMethods(UsedMethod.builder()
-								.isStatic(false)
-								.returnType(SimpleType.of("java.lang", "String"))
-								.name("world")
-								.build())
-						.build())
-				.build();
-
+			.addVisibleClasses(visibleClass(fooClass,	visibleMethod(typeOf(String.class), "hello", typeOf(int.class))))
+			.addUsedClasses(usedClass(barClass,	usedMethod(typeOf(String.class), "world")))
+			.build();
+		
 		ImmutableSignature b = Signature.builder()
-				.addVisibleClasses(VisibleClass.builder()
-						.isArray(false)
-						.visibility(Visibility.Public)
-						.name(ClassName.of("bar","Bar"))
-						.addMethods(VisibleMethod.builder()
-								.isStatic(false)
-								.visibility(Visibility.Protected)
-								.returnType(SimpleType.of("java.lang", "String"))
-								.name("world")
-								.build())
-						.build())
+				.addVisibleClasses(visibleClass(barClass,	visibleMethod(typeOf(String.class), "world")))
 				.build();
 		
-		SignatureMatcher.match(a, b);
+		Match match = SignatureMatcher.match(a, b);
+		
+		assertEquals("matching", 1, match.matching().size());
+		assertEquals("matching", Tuple.of(barClass, barClass), match.matching().get().map1(UsedClass::name).map2(VisibleClass::name));
+		assertTrue("no failed", match.failed().isEmpty());
+		assertTrue("no duplicates", match.duplicateClasses().isEmpty());
 	}
 	
 }

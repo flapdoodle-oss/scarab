@@ -12,6 +12,14 @@ public abstract class AbstractSignatureTest {
 				.build();
 	}
 	
+	protected  static UsedClass usedClass(ClassName className , UsedMethod ... methods) {
+		return UsedClass.builder()
+				.isArray(false)
+				.name(className)
+				.methods(List.of(methods))
+				.build();
+	}
+	
 	protected  static VisibleMethod visibleMethod(SimpleType returnType, String name, SimpleType ... parameters) {
 		return visibleMethod(false, returnType, name, parameters);
 	}
@@ -20,6 +28,19 @@ public abstract class AbstractSignatureTest {
 		return VisibleMethod.builder()
 				.isStatic(isStatic)
 				.visibility(Visibility.Public)
+				.returnType(returnType)
+				.name(name)
+				.parameterTypes(List.of(parameters))
+				.build();
+	}
+	
+	protected  static UsedMethod usedMethod(SimpleType returnType, String name, SimpleType ... parameters) {
+		return usedMethod(false, returnType, name, parameters);
+	}
+	
+	protected  static UsedMethod usedMethod(boolean isStatic, SimpleType returnType, String name, SimpleType ... parameters) {
+		return UsedMethod.builder()
+				.isStatic(isStatic)
 				.returnType(returnType)
 				.name(name)
 				.parameterTypes(List.of(parameters))
