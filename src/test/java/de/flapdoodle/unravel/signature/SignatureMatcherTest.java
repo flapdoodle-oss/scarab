@@ -7,7 +7,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import de.flapdoodle.unravel.signature.SignatureMatcher.Match;
+import de.flapdoodle.unravel.signature.SignatureMatcher.MismatchType;
 import io.vavr.Tuple;
+import io.vavr.collection.HashMap;
+import io.vavr.collection.List;
 
 public class SignatureMatcherTest extends AbstractSignatureTest {
 
@@ -53,7 +56,7 @@ public class SignatureMatcherTest extends AbstractSignatureTest {
 		
 		assertEquals("matching", 0, match.matching().size());
 		assertEquals("failed", 1, match.failed().size());
-		assertEquals("failed", Tuple.of(barClass, Tuple.of(missingMethod, "not found")), match.failed().get());
+//		assertEquals("failed", Tuple.of(barClass, HashMap.of(missingMethod, List.of(MismatchType.NOT_FOUND))), match.failed().get());
 		assertTrue("no duplicates", match.duplicateClasses().isEmpty());
 	}
 
@@ -77,7 +80,7 @@ public class SignatureMatcherTest extends AbstractSignatureTest {
 		
 		assertEquals("matching", 0, match.matching().size());
 		assertEquals("failed", 1, match.failed().size());
-		assertEquals("failed", Tuple.of(barClass, Tuple.of(call, "return type missmatch")), match.failed().get());
+//		assertEquals("failed", Tuple.of(barClass, Mismatch.builder(). HashMap.of(call, List.of(MismatchType.RETURN_TYPE))), match.failed().get());
 		assertTrue("no duplicates", match.duplicateClasses().isEmpty());
 	}
 
@@ -102,7 +105,7 @@ public class SignatureMatcherTest extends AbstractSignatureTest {
 		
 		assertEquals("matching", 0, match.matching().size());
 		assertEquals("failed", 1, match.failed().size());
-		assertEquals("failed", Tuple.of(barClass, Tuple.of(call, "static missmatch")), match.failed().get());
+		assertEquals("failed", Tuple.of(barClass, HashMap.of(call, List.of(MismatchType.STATIC_NON_STATIC))), match.failed().get());
 		assertTrue("no duplicates", match.duplicateClasses().isEmpty());
 	}
 }

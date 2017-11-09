@@ -10,6 +10,7 @@ import de.flapdoodle.unravel.signature.SignatureMatcher.Match;
 import de.flapdoodle.unravel.signature.SimpleType;
 import de.flapdoodle.unravel.signature.UsedClass;
 import de.flapdoodle.unravel.signature.UsedMethod;
+import de.flapdoodle.unravel.signature.VisibleMethod;
 
 public class ScarabJarMatcher {
 
@@ -37,10 +38,13 @@ public class ScarabJarMatcher {
 			System.out.println("conflicts");
 			System.out.println("-----------------------------");
 			System.out.println("errors:");
-			match.failed().toJavaMap().forEach((className, errors) -> {
+			match.failed().toJavaMap().forEach((className, error) -> {
 				System.out.println(asString(className));
-				errors.forEach(methodAndError -> {
-					System.out.println("  "+asString(methodAndError._1())+" -> "+methodAndError._2());
+				error.methods().forEach(methodAndError -> {
+					System.out.println("  ? "+asString(methodAndError.method())+" -> "+methodAndError.types().mkString(","));
+				});
+				error.visibleClass().methods().forEach(vm -> {
+					System.out.println("  + "+asString(vm));
 				});
 			});
 			if (!match.duplicateClasses().isEmpty()) {
@@ -54,13 +58,17 @@ public class ScarabJarMatcher {
 				System.out.println("- - - - - - - - - - - - - - - -");
 				System.out.println("resolved types:");
 				match.matching().forEach((s,d) -> {
-					System.out.println(asString(s));
+					System.out.println("  "+asString(s));
 				});
 			}
 		}
 	}
 
 	private static String asString(UsedMethod method) {
+		return asString(method.returnType())+" "+method.name()+"("+method.parameterTypes().map(s -> asString(s)).fold("", (a,b) -> a+","+b)+")";
+	}
+
+	private static String asString(VisibleMethod method) {
 		return asString(method.returnType())+" "+method.name()+"("+method.parameterTypes().map(s -> asString(s)).fold("", (a,b) -> a+","+b)+")";
 	}
 
