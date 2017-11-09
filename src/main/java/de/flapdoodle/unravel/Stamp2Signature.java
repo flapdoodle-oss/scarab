@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 
+import de.flapdoodle.unravel.signature.ClassName;
 import de.flapdoodle.unravel.signature.ImmutableSignature.Builder;
 import de.flapdoodle.unravel.signature.Signature;
 import de.flapdoodle.unravel.signature.SimpleType;
@@ -49,8 +50,7 @@ public class Stamp2Signature {
 	private static UsedClass asUsedClass(Class c, ImmutableCollection<MethodNode> methods, ImmutableCollection<FieldNode> fields) {
 		return UsedClass.builder()
 				.isArray(c.isArray())
-				.packageName(c.pkg().canonicalName())
-				.name(c.simpleName())
+				.name(ClassName.of(c.pkg().canonicalName(), c.simpleName()))
 				.methods(asUsedMethods(methods))
 				.fields(asUsedFields(fields))
 				.build();
@@ -72,8 +72,7 @@ public class Stamp2Signature {
 		return VisibleClass.builder()
 				.isArray(c.isArray())
 				.visibility(visibilityOf(c.modifiers))
-				.packageName(c.pkg().canonicalName())
-				.name(c.simpleName())
+				.name(ClassName.of(c.pkg().canonicalName(), c.simpleName()))
 				.methods(asMethods(methods))
 				.fields(asFields(fields))
 				.build();

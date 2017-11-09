@@ -90,10 +90,10 @@ public class Signature2Text {
 		if (type.isArray()) {
 			post="[]";
 		}
-		if (type.packageName().isEmpty()) {
-			return type.name()+post;
+		if (type.name().packageName().isEmpty()) {
+			return type.name().name()+post;
 		}
-		return type.packageName() + "." + type.name()+post;
+		return type.name().packageName() + "." + type.name().name()+post;
 	}
 
 }

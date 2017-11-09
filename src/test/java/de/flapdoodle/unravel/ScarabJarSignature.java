@@ -1,11 +1,9 @@
 package de.flapdoodle.unravel;
 
-import java.io.FileInputStream;
-
 import com.google.common.base.Preconditions;
 
-import de.flapdoodle.types.ThrowingSupplier;
-import de.flapdoodle.types.Try;
+import de.flapdoodle.unravel.io.Jars;
+import de.flapdoodle.unravel.signature.Signature;
 import de.flapdoodle.unravel.signature.Signature2Text;
 
 public class ScarabJarSignature {
@@ -14,12 +12,12 @@ public class ScarabJarSignature {
 		Preconditions.checkArgument(args.length >= 1, "usage: <jarfile>");
 		String jarFile = args[0];
 
-		ThrowingSupplier<FileInputStream, RuntimeException> jarFileSupplier = Try.supplier(() -> new FileInputStream(jarFile)).mapCheckedException(RuntimeException::new);
-		
-		String signature = Signature2Text.toText(Stamp2Signature.asSignature(new ScarabJarStamper().stamp(jarFileSupplier::get)));
+		Signature signature = Jars.signatureOfJar(jarFile);
+		String signatureAsString = Signature2Text.toText(signature);
 		
 		System.out.println("------------------------------");
-		System.out.println(signature);
+		System.out.println(signatureAsString);
 		System.out.println("------------------------------");
 	}
+
 }

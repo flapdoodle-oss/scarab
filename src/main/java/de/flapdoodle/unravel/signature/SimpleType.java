@@ -8,11 +8,7 @@ import org.immutables.value.Value.Parameter;
 public interface SimpleType extends CommonClass {
 	@Override
 	@Parameter
-	String packageName();
-
-	@Override
-	@Parameter
-	String name();
+	ClassName name();
 	
 	@Override
 	@Default
@@ -21,10 +17,10 @@ public interface SimpleType extends CommonClass {
 	}
 	
 	public static SimpleType of(String packageName, String name) {
-		return ImmutableSimpleType.of(packageName, name);
+		return ImmutableSimpleType.of(ClassName.of(packageName, name));
 	}
 	
 	public static SimpleType arrayOf(String packageName, String name) {
-		return ImmutableSimpleType.of(packageName, name).withIsArray(true);
+		return ImmutableSimpleType.of(ClassName.of(packageName, name)).withIsArray(true);
 	}
 }
