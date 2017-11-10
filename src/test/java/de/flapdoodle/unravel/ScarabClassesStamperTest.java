@@ -17,44 +17,46 @@ import com.google.common.io.Resources;
 
 import de.flapdoodle.types.Try;
 import de.flapdoodle.unravel.signature.Signature2Text;
+import se.jbee.jvm.Classes;
+import se.jbee.sample.modifiers.Exporter;
 
 public class ScarabClassesStamperTest {
 
 	@Test
 	public void oneTwoThreeSample() {
-		ImmutableList<Supplier<InputStream>> sampleClasses = Stream.of("One","Two","Three","Hidden")
-			.map(c -> streamOf("packages/sample/one-two-three/"+c+".class"))
-			.collect(ImmutableList.toImmutableList());
-		
+		ImmutableList<Supplier<InputStream>> sampleClasses = Stream.of("One", "Two", "Three", "Hidden")
+				.map(c -> streamOf("packages/sample/one-two-three/" + c + ".class"))
+				.collect(ImmutableList.toImmutableList());
+
 		Stamp stamp = new ScarabClassesStamper().stampOf(sampleClasses);
-		
-		signatureOf(stamp); 
+
+		signatureOf(stamp);
 	}
-	
+
+
 	@Test
-	public void modifiersSample() {
-		ImmutableList<Supplier<InputStream>> sampleClasses = Stream.of("Api","Impl","ImplFactory","AbstractClient","AbstractClient$1")
-			.map(c -> streamOf("packages/sample/modifiers/"+c+".class"))
-			.collect(ImmutableList.toImmutableList());
-		
-		Stamp stamp = new ScarabClassesStamper().stampOf(sampleClasses);
+	public void modifiersSample() throws ClassNotFoundException {
+		Stamp stamp = new ScarabClassesStamper()
+				.stampOf(Exporter.classSet().stream()
+						.map(Classes::byteCodeOf)
+						.collect(ImmutableList.toImmutableList()));
 		
 		signatureOf(stamp);
-	} 
-	
+	}
+
 	@Test
 	@Ignore
 	public void liveSample() throws IOException {
-		ImmutableList<Supplier<InputStream>> all = Files.walk(Paths.get("target", "test-classes","se","jbee","sample","egdecases"))
+		ImmutableList<Supplier<InputStream>> all = Files.walk(Paths.get("target", "test-classes", "se", "jbee", "sample", "egdecases"))
 				.filter(path -> path.getFileName().toString().endsWith(".class"))
 				.map(path -> inputStreamSupplierOf(path))
-			.collect(ImmutableList.toImmutableList());
-		 
+				.collect(ImmutableList.toImmutableList());
+
 		Stamp stamp = new ScarabClassesStamper().stampOf(all);
-		
+
 		signatureOf(stamp);
-	} 
-	
+	}
+
 	private Supplier<InputStream> inputStreamSupplierOf(Path path) {
 		return () -> Try.supplier(() -> new FileInputStream(path.toFile())).mapCheckedException(RuntimeException::new).get();
 	}
@@ -65,11 +67,11 @@ public class ScarabClassesStamperTest {
 				return Resources.getResource(resourceName).openStream();
 			}
 			catch (IOException e) {
-				throw new RuntimeException("could not open "+resourceName);
+				throw new RuntimeException("could not open " + resourceName);
 			}
 		};
 	}
-	
+
 	private static void signatureOf(Stamp stamp) {
 		String asText = Signature2Text.toText(Stamp2Signature.asSignature(stamp));
 		System.out.println("------------------------");

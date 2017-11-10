@@ -2,9 +2,11 @@ package se.jbee.jvm;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import com.google.common.base.Preconditions;
 import com.google.common.io.Resources;
 
 import se.jbee.jvm.file.ClassFile;
@@ -34,7 +36,8 @@ public class Classes {
 	
 	private static InputStream byteCodeInputStream(java.lang.Class<?> clazz) {
 		try {
-			return Resources.asByteSource(clazz.getResource(clazz.getSimpleName()+".class")).openStream();
+			URL resource = clazz.getResource(clazz.getSimpleName()+".class");
+			return Resources.asByteSource(Preconditions.checkNotNull(resource,"could not get resource of %s",clazz)).openStream();
 		}
 		catch (IOException e) {
 			throw new RuntimeException("could get bytecode of "+clazz, e);

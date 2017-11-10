@@ -28,7 +28,7 @@ public class ScarabJarStamper implements JarStamper {
 			throw new RuntimeException(e);
 		}
 
-		return ScarabClassesStamper.stampOf(out,archive);
+		return StampFactory.stampOf(out,archive);
 	}
 
 }
