@@ -19,6 +19,7 @@ import de.flapdoodle.unravel.signature.VisibleField;
 import de.flapdoodle.unravel.signature.VisibleMethod;
 import io.vavr.collection.List;
 import se.jbee.jvm.Class;
+import se.jbee.jvm.Method;
 import se.jbee.jvm.Modifiers;
 import se.jbee.jvm.Parameter;
 import se.jbee.jvm.graph.FieldNode;
@@ -73,7 +74,7 @@ public class Stamp2Signature {
 	private static VisibleClass asVisibleClass(Class c, ImmutableCollection<MethodNode> methods, ImmutableCollection<FieldNode> fields) {
 		return VisibleClass.builder()
 				.isArray(c.isArray())
-				.visibility(visibilityOf(c.modifiers))
+				.visibility(visibilityOf(c))
 				.name(ClassName.of(c.canonicalName()))
 				.addAllMethods(asMethods(methods))
 				.addAllFields(asFields(fields))
@@ -104,12 +105,31 @@ public class Stamp2Signature {
 	private static VisibleMethod asMethod(MethodNode m) {
 		return VisibleMethod.builder()
 				.isStatic(m.isStaticMethod())
-				.visibility(visibilityOf(m.id().modifiers()))
+				.visibility(visibilityOf(m.id()))
 				.returnType(asType(m.id().returnType))
 				.name(m.id().name())
 				.addAllParameterTypes(asTypes(m.id().parameters()))
 				// TODO: throwing not implemented
 				.build();
+	}
+
+	private static Visibility visibilityOf(Class c) {
+		if (c.isPackageProtected()) return Visibility.PackageProtected;
+		if (c.isPublic()) return Visibility.Public;
+		if (c.isProtected()) return Visibility.Protected;
+		if (c.isPrivate()) return Visibility.Private;
+		
+		throw new IllegalArgumentException("mapping failed: "+c);
+	}
+
+
+	private static Visibility visibilityOf(Method id) {
+		if (id.isPackageProtected()) return Visibility.PackageProtected;
+		if (id.isPublic()) return Visibility.Public;
+		if (id.isProtected()) return Visibility.Protected;
+		if (id.isPrivate()) return Visibility.Private;
+		
+		throw new IllegalArgumentException("mapping failed: "+id);
 	}
 
 	private static UsedMethod asUsedMethod(MethodNode m) {
@@ -134,6 +154,7 @@ public class Stamp2Signature {
 		return SimpleType.of(c.pkg().canonicalName(), c.simpleName());
 	}
 
+	@Deprecated
 	private static Visibility visibilityOf(Modifiers modifiers) {
 		return modifiers.isProtected()
 				? Visibility.Protected

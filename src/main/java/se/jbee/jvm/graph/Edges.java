@@ -88,7 +88,7 @@ public final class Edges<K, T extends Node<K>>
 			.filter(matcher)
 			.limit(2)
 			.collect(Collectors.toList());
-		Preconditions.checkArgument(matching.size()<2,"more than one matching");
+		Preconditions.checkArgument(matching.size()<2,"more than one matching: %s", matching);
 		return matching.isEmpty() ? Optional.empty() : Optional.of(matching.get(0));
 	}
 }

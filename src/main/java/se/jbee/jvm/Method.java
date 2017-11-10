@@ -102,4 +102,21 @@ public final class Method
 	public boolean isStaticInitialization() {
 		return name.charAt( 0 ) == '<' && name.length() == 8; //<clinit>
 	}
+	
+	public boolean isPublic() {
+		return modifiers.isPublic();
+	}
+
+	public boolean isProtected() {
+		return modifiers.isProtected();
+	}
+
+	public boolean isPackageProtected() {
+		return !isPublic() && !isProtected() && !isPrivate();
+	}
+
+	public boolean isPrivate() {
+		return modifiers.isPrivate();
+	}
+
 }

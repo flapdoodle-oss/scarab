@@ -1,5 +1,5 @@
 package de.flapdoodle.unravel.signature;
 
 public enum Visibility {
-	Public, Protected;
+	Public, PackageProtected, Protected, Private;
 }

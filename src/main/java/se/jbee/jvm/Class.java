@@ -126,6 +126,10 @@ public final class Class {
 		return modifiers.isProtected() || (isTopLevel() && !isPublic());
 	}
 
+	public boolean isPackageProtected() {
+		return !isPublic() && !isProtected() && !isPrivate();
+	}
+	
 	public boolean isPrivate() {
 		return modifiers.isPrivate();
 	}

@@ -49,7 +49,7 @@ public class Signature2Text {
 	}
 
 	private static void renderMethod(StringBuilder sb, CommonMethod method) {
-		sb.append(" ");
+		sb.append("  ");
 		if (method.isStatic()) {
 			sb.append("static ");
 		}
@@ -63,7 +63,7 @@ public class Signature2Text {
 	}
 
 	private static void renderField(StringBuilder sb, CommonField field) {
-		sb.append(" ");
+		sb.append("  ");
 		if (field.isStatic()) {
 			sb.append("static ");
 		}
@@ -75,6 +75,12 @@ public class Signature2Text {
 	private static String asString(Visibility visibility) {
 		if (visibility == Visibility.Protected) {
 			return "protected ";
+		}
+		if (visibility == Visibility.PackageProtected) {
+			return "package-protected ";
+		}
+		if (visibility == Visibility.Private) {
+			return "private ";
 		}
 		return "";
 	}
