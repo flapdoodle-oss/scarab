@@ -374,6 +374,12 @@
 			<version>0.9.11</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.ow2.asm/asm -->
+		<dependency>
+			<groupId>org.ow2.asm</groupId>
+			<artifactId>asm</artifactId>
+			<version>5.2</version>
+		</dependency>
 
 
 	</dependencies>
